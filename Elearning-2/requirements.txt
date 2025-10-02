@@ -1,0 +1,6 @@
+# Requirements for UDP Optimization Project
+# No external dependencies needed for basic functionality
+
+# For potential future enhancements
+# asyncio==3.4.3
+# numpy==1.21.0  # For advanced statistics
