@@ -1,0 +1,4 @@
+# Elearning-3: Async Coffee Shop
+# No external dependencies required
+
+# Python 3.8+ is required for asyncio features
