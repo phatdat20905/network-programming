@@ -1,0 +1,15 @@
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\bin\Debug\net8.0\CSharpTCP.exe
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\bin\Debug\net8.0\CSharpTCP.deps.json
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\bin\Debug\net8.0\CSharpTCP.runtimeconfig.json
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\bin\Debug\net8.0\CSharpTCP.dll
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\bin\Debug\net8.0\CSharpTCP.pdb
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.GeneratedMSBuildEditorConfig.editorconfig
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.AssemblyInfoInputs.cache
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.AssemblyInfo.cs
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.csproj.CoreCompileInputs.cache
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.sourcelink.json
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.dll
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\refint\CSharpTCP.dll
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.pdb
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\CSharpTCP.genruntimeconfig.cache
+D:\Workspace\LapTrinhMang\network-programming\Elearning-1\Code-Examples\CSharpTCP\obj\Debug\net8.0\ref\CSharpTCP.dll
