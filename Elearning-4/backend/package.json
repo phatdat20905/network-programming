@@ -16,7 +16,9 @@
     "db:seed:all": "npx sequelize-cli db:seed:all",
     "db:seed:undo": "npx sequelize-cli db:seed:undo",
     "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all",
-    "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed:all"
+    "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed:all",
+    "create:admin": "node src/scripts/createAdmin.js",
+    "sync:db": "node src/scripts/syncDatabase.js"
   },
   "author": "",
   "license": "ISC",
@@ -37,5 +39,16 @@
   "devDependencies": {
     "nodemon": "^3.1.10",
     "sequelize-cli": "^6.6.3"
-  }
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "sequelize",
+    "mysql",
+    "jwt",
+    "blog",
+    "api"
+  ],
+  "author": "Phat Dat",
+  "license": "MIT"
 }
