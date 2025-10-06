@@ -20,7 +20,7 @@
     "create:admin": "node src/scripts/createAdmin.js",
     "sync:db": "node src/scripts/syncDatabase.js"
   },
-  "author": "",
+  "author": "Phat Dat",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -48,7 +48,5 @@
     "jwt",
     "blog",
     "api"
-  ],
-  "author": "Phat Dat",
-  "license": "MIT"
+  ]
 }
