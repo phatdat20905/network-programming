@@ -13,6 +13,8 @@ import UserManagementPage from './pages/admin/UserManagementPage'
 import CategoryManagementPage from './pages/admin/CategoryManagementPage'
 import TagManagementPage from './pages/admin/TagManagementPage'
 import NotFound from './pages/NotFound'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import AdminRoute from './components/auth/AdminRoute'
 
 export const router = createBrowserRouter([
   {
@@ -25,13 +27,39 @@ export const router = createBrowserRouter([
       { path: 'blogs', element: <BlogListPage /> },
       { path: 'blogs/:id', element: <BlogDetailPage /> },
       { path: 'blogs/slug/:slug', element: <BlogDetailPage /> },
-      { path: 'profile', element: <Profile /> },
-      { path: 'blogs/create', element: <BlogCreatePage /> },
-      { path: 'blogs/edit/:id', element: <BlogEditPage /> },
-      { path: 'admin', element: <AdminDashboard /> },
-      { path: 'admin/users', element: <UserManagementPage /> },
-      { path: 'admin/categories', element: <CategoryManagementPage /> },
-      { path: 'admin/tags', element: <TagManagementPage /> },
+      
+      // Protected routes
+      {
+        path: 'profile',
+        element: <ProtectedRoute><Profile /></ProtectedRoute>,
+      },
+      {
+        path: 'blogs/create',
+        element: <ProtectedRoute><BlogCreatePage /></ProtectedRoute>,
+      },
+      {
+        path: 'blogs/edit/:id',
+        element: <ProtectedRoute><BlogEditPage /></ProtectedRoute>,
+      },
+      
+      // Admin routes
+      {
+        path: 'admin',
+        element: <AdminRoute><AdminDashboard /></AdminRoute>,
+      },
+      {
+        path: 'admin/users',
+        element: <AdminRoute><UserManagementPage /></AdminRoute>,
+      },
+      {
+        path: 'admin/categories',
+        element: <AdminRoute><CategoryManagementPage /></AdminRoute>,
+      },
+      {
+        path: 'admin/tags',
+        element: <AdminRoute><TagManagementPage /></AdminRoute>,
+      },
+      
       { path: '*', element: <NotFound /> },
     ],
   },

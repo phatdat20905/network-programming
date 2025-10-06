@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
-import { 
-  Menu, 
-  X, 
-  User, 
-  LogOut, 
+import {
+  Menu,
+  X,
+  User,
+  LogOut,
   Settings,
   BookOpen,
   Users,
@@ -21,12 +21,12 @@ const Header = () => {
 
   const handleLogout = async () => {
     await logout()
-    navigate('/')
     setIsProfileMenuOpen(false)
+    navigate('/', { replace: true })
   }
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -49,7 +49,7 @@ const Header = () => {
             >
               Blogs
             </Link>
-            
+
             {isAuthenticated && (
               <Link
                 to="/blogs/create"
@@ -64,19 +64,16 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                {/* Admin Links */}
                 {isAdmin && (
-                  <div className="hidden md:flex items-center space-x-2">
-                    <Link
-                      to="/admin"
-                      className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Admin
-                    </Link>
-                  </div>
+                  <Link
+                    to="/admin"
+                    className="hidden md:block text-gray-700 hover:text-primary-600 text-sm font-medium"
+                  >
+                    Admin
+                  </Link>
                 )}
 
-                {/* Profile Menu */}
+                {/* Profile Dropdown */}
                 <div className="relative">
                   <button
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
@@ -91,14 +88,13 @@ const Header = () => {
                   </button>
 
                   {isProfileMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
                       <Link
                         to="/profile"
                         onClick={() => setIsProfileMenuOpen(false)}
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
-                        <User className="h-4 w-4 mr-2" />
-                        Profile
+                        <User className="h-4 w-4 mr-2" /> Profile
                       </Link>
                       {isAdmin && (
                         <Link
@@ -106,16 +102,14 @@ const Header = () => {
                           onClick={() => setIsProfileMenuOpen(false)}
                           className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                          <Settings className="h-4 w-4 mr-2" />
-                          Admin Dashboard
+                          <Settings className="h-4 w-4 mr-2" /> Dashboard
                         </Link>
                       )}
                       <button
                         onClick={handleLogout}
                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
-                        <LogOut className="h-4 w-4 mr-2" />
-                        Sign out
+                        <LogOut className="h-4 w-4 mr-2" /> Sign out
                       </button>
                     </div>
                   )}
@@ -125,131 +119,28 @@ const Header = () => {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/login"
-                  className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-700 hover:text-primary-600 text-sm font-medium"
                 >
                   Sign in
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-primary-600 text-white hover:bg-primary-700 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition"
                 >
                   Sign up
                 </Link>
               </div>
             )}
 
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100 focus:outline-none"
+              className="md:hidden p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            <div className="flex flex-col space-y-2">
-              <Link
-                to="/"
-                onClick={() => setIsMenuOpen(false)}
-                className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-              >
-                Home
-              </Link>
-              <Link
-                to="/blogs"
-                onClick={() => setIsMenuOpen(false)}
-                className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-              >
-                Blogs
-              </Link>
-              
-              {isAuthenticated && (
-                <>
-                  <Link
-                    to="/blogs/create"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    Write Blog
-                  </Link>
-                  <Link
-                    to="/profile"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    Profile
-                  </Link>
-                </>
-              )}
-
-              {/* Admin Links */}
-              {isAdmin && (
-                <>
-                  <div className="border-t border-gray-200 pt-2 mt-2">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">
-                      Admin
-                    </p>
-                    <Link
-                      to="/admin"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                    >
-                      <Settings className="h-4 w-4 mr-2" />
-                      Dashboard
-                    </Link>
-                    <Link
-                      to="/admin/users"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                    >
-                      <Users className="h-4 w-4 mr-2" />
-                      Users
-                    </Link>
-                    <Link
-                      to="/admin/categories"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                    >
-                      <FolderOpen className="h-4 w-4 mr-2" />
-                      Categories
-                    </Link>
-                    <Link
-                      to="/admin/tags"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                    >
-                      <Tags className="h-4 w-4 mr-2" />
-                      Tags
-                    </Link>
-                  </div>
-                </>
-              )}
-
-              {!isAuthenticated && (
-                <div className="border-t border-gray-200 pt-2 mt-2">
-                  <Link
-                    to="/login"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    Sign in
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    Sign up
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </header>
   )

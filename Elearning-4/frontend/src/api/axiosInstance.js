@@ -4,6 +4,9 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 
 let isRefreshing = false
 let failedQueue = []
+let requestCount = 0
+let lastResetTime = Date.now()
+const MAX_REQUESTS_PER_MINUTE = 60
 
 const processQueue = (error, token = null) => {
   failedQueue.forEach(prom => {
@@ -24,9 +27,29 @@ const axiosInstance = axios.create({
   },
 })
 
-// Request interceptor
+// Request interceptor - Thêm rate limiting
 axiosInstance.interceptors.request.use(
   (config) => {
+    // Reset counter mỗi phút
+    const now = Date.now()
+    if (now - lastResetTime > 60000) {
+      requestCount = 0
+      lastResetTime = now
+    }
+
+    // Kiểm tra rate limiting
+    if (requestCount >= MAX_REQUESTS_PER_MINUTE) {
+      console.warn('Rate limit exceeded, delaying request')
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          requestCount++
+          resolve(config)
+        }, 1000)
+      })
+    }
+
+    requestCount++
+
     const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`
@@ -38,7 +61,7 @@ axiosInstance.interceptors.request.use(
   }
 )
 
-// Response interceptor
+// Response interceptor - Xử lý lỗi tốt hơn
 axiosInstance.interceptors.response.use(
   (response) => {
     return response.data
@@ -46,8 +69,20 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Xử lý rate limiting (429)
+    if (error.response?.status === 429) {
+      console.warn('Rate limited by server, waiting 5 seconds...')
       
+      // Đợi 5 giây và không retry tự động
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject(error)
+        }, 5000)
+      })
+    }
+
+    // Xử lý authentication (401)
+    if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
@@ -96,8 +131,8 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.response?.status === 403) {
-      console.warn('Access forbidden, logging out...')
-      logoutUser()
+      console.warn('Access forbidden')
+      // Không logout tự động, chỉ reject error
     }
 
     return Promise.reject(error.response?.data || error)
@@ -121,7 +156,7 @@ const logoutUser = () => {
   }
 }
 
-// Auto refresh token
+// Auto refresh token (giữ nguyên)
 const setupTokenRefresh = () => {
   const checkTokenExpiry = () => {
     const accessToken = localStorage.getItem('accessToken')
@@ -147,7 +182,6 @@ const setupTokenRefresh = () => {
             })
             .catch(error => {
               console.error('Auto token refresh failed:', error)
-              logoutUser()
             })
         }
       }

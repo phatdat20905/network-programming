@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { userAPI, blogAPI, categoryAPI } from '../../api'
+import { userAPI, blogAPI, categoryAPI, tagAPI } from '../../api'
 import { Card } from '../../components/ui'
 import { 
   Users, 
@@ -32,12 +32,12 @@ const AdminDashboard = () => {
     try {
       setLoading(true)
       
-      // Load stats
+      // Load stats từ các API có sẵn
       const [usersRes, blogsRes, categoriesRes, tagsRes] = await Promise.all([
-        userAPI.getStats(),
+        userAPI.getAll({ limit: 1 }), // Thay thế getStats()
         blogAPI.getAll({ limit: 1 }),
         categoryAPI.getAll({ limit: 1 }),
-        userAPI.getStats() // Using as placeholder for tags
+        tagAPI.getAll({ limit: 1 })
       ])
 
       // Load recent blogs
@@ -48,16 +48,25 @@ const AdminDashboard = () => {
       })
 
       setStats({
-        users: usersRes.data?.totalUsers || 0,
+        users: usersRes.pagination?.totalItems || 0,
         blogs: blogsRes.pagination?.totalItems || 0,
         categories: categoriesRes.pagination?.totalItems || 0,
-        tags: 50, // Placeholder
-        totalViews: 15000 // Placeholder
+        tags: tagsRes.pagination?.totalItems || 0,
+        totalViews: recentBlogsRes.data?.reduce((total, blog) => total + (blog.view_count || 0), 0) || 0
       })
 
       setRecentBlogs(recentBlogsRes.data || [])
     } catch (error) {
       console.error('Error loading dashboard data:', error)
+      // Fallback data để không bị lỗi UI
+      setStats({
+        users: 0,
+        blogs: 0,
+        categories: 0,
+        tags: 0,
+        totalViews: 0
+      })
+      setRecentBlogs([])
     } finally {
       setLoading(false)
     }

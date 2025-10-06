@@ -9,10 +9,7 @@ export const userAPI = {
     return axiosInstance.get(`/admin/users/${id}`)
   },
 
-  getStats: () => {
-    return axiosInstance.get('/admin/users/stats')
-  },
-
+  // ĐÃ XÓA getStats() vì không có route này trên backend
   update: (id, data) => {
     return axiosInstance.put(`/admin/users/${id}`, data)
   },

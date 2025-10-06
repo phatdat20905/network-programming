@@ -24,14 +24,16 @@ const BlogListPage = () => {
   const [pagination, setPagination] = useState({})
   const debouncedSearch = useDebounce(filters.search, 500)
 
+  // Chỉ gọi loadBlogs khi các filters quan trọng thay đổi
   useEffect(() => {
     loadBlogs()
-  }, [filters, debouncedSearch])
+  }, [debouncedSearch, filters.category, filters.tag, filters.sortBy, filters.page])
 
+  // Chỉ load categories và tags một lần
   useEffect(() => {
     loadCategories()
     loadTags()
-  }, [])
+  }, []) // Empty dependency array
 
   const loadBlogs = async () => {
     try {
@@ -44,7 +46,11 @@ const BlogListPage = () => {
       setBlogs(response.data)
       setPagination(response.pagination)
     } catch (error) {
-      setError('Failed to load blogs')
+      if (error.message?.includes('Too many requests') || error.status === 429) {
+        setError('Please wait a moment before trying again')
+      } else {
+        setError('Failed to load blogs')
+      }
       console.error('Error loading blogs:', error)
     } finally {
       setLoading(false)

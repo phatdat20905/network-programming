@@ -2,16 +2,16 @@
 
 A modern, responsive blog application built with React, Vite, and Tailwind CSS. This frontend application provides a complete blogging platform with user authentication, blog management, and admin dashboard.
 
-## 🚀 Features
+## Features
 
-### 🔐 Authentication & Authorization
+### Authentication & Authorization
 - User registration and login
 - JWT-based authentication
 - Protected routes
 - Admin role management
 - Token refresh mechanism
 
-### 📝 Blog Management
+### Blog Management
 - Create, read, update, and delete blogs
 - Rich text content support
 - Image upload for blog covers
@@ -19,21 +19,21 @@ A modern, responsive blog application built with React, Vite, and Tailwind CSS. 
 - Blog search and filtering
 - Pagination
 
-### 🎨 User Experience
+### User Experience
 - Responsive design for all devices
 - Modern UI with Tailwind CSS
 - Loading states and error handling
 - Toast notifications
 - Dark mode support (ready for implementation)
 
-### 👥 Admin Features
+### Admin Features
 - User management
-- Category management  
+- Category management
 - Tag management
 - Dashboard with analytics
 - Content moderation
 
-### 🔧 Technical Features
+### Technical Features
 - React Router for navigation
 - Context API for state management
 - Custom hooks for reusable logic
@@ -41,7 +41,7 @@ A modern, responsive blog application built with React, Vite, and Tailwind CSS. 
 - Form validation
 - Image optimization
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend Framework:** React 18
 - **Build Tool:** Vite
@@ -53,7 +53,7 @@ A modern, responsive blog application built with React, Vite, and Tailwind CSS. 
 - **Form Handling:** Custom hooks
 - **State Management:** React Context API
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Node.js (version 14 or higher)
@@ -63,35 +63,48 @@ A modern, responsive blog application built with React, Vite, and Tailwind CSS. 
 ### Setup Instructions
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd Elearning-4/frontend
-    ```
-2. **Install dependencies
+   ```
 
-bash
-npm install
-# or
-yarn install
-Environment Configuration
-Create a .env file in the root directory:
+2. **Install dependencies**
 
-env
-VITE_API_BASE_URL=http://localhost:5000/api
-VITE_APP_NAME=BlogApp
-Start the development server
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-bash
-npm run dev
-# or
-yarn dev
-Build for production
+3. **Environment Configuration**
 
-bash
-npm run build
-# or
-yarn build
-🏗 Project Structure
+   Create a `.env` file in the root directory:
+
+   ```env
+   VITE_API_BASE_URL=http://localhost:5000/api
+   VITE_APP_NAME=BlogApp
+   ```
+
+4. **Start the development server**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. **Build for production**
+
+   ```bash
+   npm run build
+   # or
+   yarn build
+   ```
+
+## Project Structure
+
+```
 frontend/
 ├── public/
 │   ├── index.html
@@ -175,100 +188,76 @@ frontend/
 ├── vite.config.js
 ├── tailwind.config.js
 └── postcss.config.js
+```
 
-🔌 API Integration
+## API Integration
+
 The frontend communicates with a RESTful API. Key endpoints include:
 
-Authentication: /auth/login, /auth/register, /auth/refresh-token
+- **Authentication**: `/auth/login`, `/auth/register`, `/auth/refresh-token`
+- **Blogs**: `/blogs`, `/blogs/:id`, `/blogs/user/my-blogs`
+- **Categories**: `/categories`
+- **Tags**: `/tags`
+- **Users**: `/admin/users` (admin only)
+- **Upload**: `/upload/image`
 
-Blogs: /blogs, /blogs/:id, /blogs/user/my-blogs
+## Key Components
 
-Categories: /categories
+### UI Components
+- **Button**: Custom button with variants
+- **Input**: Form input with validation
+- **Modal**: Reusable modal dialog
+- **Pagination**: Pagination controls
+- **LoadingSpinner**: Loading indicator
 
-Tags: /tags
+### Layout Components
+- **Header**: Navigation header with user menu
+- **Sidebar**: Admin sidebar navigation
+- **Footer**: Site footer
+- **Layout**: Main layout wrapper
 
-Users: /admin/users (admin only)
+### Blog Components
+- **BlogCard**: Blog preview card
+- **BlogList**: Blog listing grid
+- **BlogDetail**: Blog detail view
+- **BlogForm**: Blog creation/editing form
+- **BlogFilters**: Search and filter controls
 
-Upload: /upload/image
+## Authentication Flow
+1. User logs in with email/password
+2. JWT tokens (access & refresh) are stored securely
+3. Access token is included in API requests
+4. Token refresh happens automatically
+5. Protected routes check authentication status
 
-🎯 Key Components
-UI Components
-Button - Custom button with variants
+## Styling & Theming
+- Tailwind CSS for utility-first styling
+- Responsive design with mobile-first approach
+- Custom color palette in `tailwind.config.js`
+- Dark mode ready (implemented in `ThemeContext`)
 
-Input - Form input with validation
-
-Modal - Reusable modal dialog
-
-Pagination - Pagination controls
-
-LoadingSpinner - Loading indicator
-
-Layout Components
-Header - Navigation header with user menu
-
-Sidebar - Admin sidebar navigation
-
-Footer - Site footer
-
-Layout - Main layout wrapper
-
-Blog Components
-BlogCard - Blog preview card
-
-BlogList - Blog listing grid
-
-BlogDetail - Blog detail view
-
-BlogForm - Blog creation/editing form
-
-BlogFilters - Search and filter controls
-
-🔒 Authentication Flow
-User logs in with email/password
-
-JWT tokens (access & refresh) are stored securely
-
-Access token is included in API requests
-
-Token refresh happens automatically
-
-Protected routes check authentication status
-
-🎨 Styling & Theming
-Tailwind CSS for utility-first styling
-
-Responsive design with mobile-first approach
-
-Custom color palette in tailwind.config.js
-
-Dark mode ready (implemented in ThemeContext)
-
-📱 Responsive Design
+## Responsive Design
 The application is fully responsive with breakpoints:
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
 
-Mobile: < 768px
+## Environment Variables for Production
 
-Tablet: 768px - 1024px
-
-Desktop: > 1024px
-
-Environment Variables for Production
-env
+```env
 VITE_API_BASE_URL=https://your-api-domain.com/api
 VITE_APP_NAME=BlogApp
+```
 
+## Project Status
 
-## 🎉 **DỰ ÁN ĐÃ HOÀN THIỆN 100%!**
+### Completed Features
+- **Sidebar component** for admin panel
+- **README.md** with detailed instructions
+- All components, pages, hooks, and utils
+- Comprehensive documentation for development and deployment
 
-Bây giờ dự án frontend của bạn đã có:
-
-### ✅ **ĐÃ HOÀN THÀNH ĐẦY ĐỦ:**
-- **Sidebar component** cho admin panel
-- **README.md** hoàn chỉnh với hướng dẫn chi tiết
-- **Tất cả components, pages, hooks, utils**
-- **Documentation đầy đủ** cho development và deployment
-
-### 🚀 **TÍNH NĂNG HOÀN CHỈNH:**
+### Functional Features
 - Authentication system
 - Blog management (CRUD)
 - Admin dashboard
@@ -280,4 +269,4 @@ Bây giờ dự án frontend của bạn đã có:
 - Search & filters
 - Pagination
 
-Bạn có thể bắt đầu sử dụng dự án ngay! Chạy `npm run dev` để khởi động development server và kiểm tra tất cả tính năng. 🎯
+You can start using the project now! Run `npm run dev` to start the development server and test all features.

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react'
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react'
 import { authAPI } from '../api/auth'
 import toast from 'react-hot-toast'
 
@@ -19,11 +19,17 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [tokens, setTokens] = useState([])
 
-  useEffect(() => {
-    initializeAuth()
+  const clearAuthData = useCallback(() => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('user')
+    setUser(null)
+    setIsAuthenticated(false)
+    setIsAdmin(false)
+    setTokens([])
   }, [])
 
-  const initializeAuth = async () => {
+  const initializeAuth = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem('accessToken')
       if (accessToken) {
@@ -31,11 +37,18 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Auth initialization failed:', error)
-      logout()
+      // Không logout tự động khi initialize fail
+      if (error.response?.status === 429) {
+        console.warn('Rate limited during auth initialization')
+      }
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    initializeAuth()
+  }, [initializeAuth])
 
   const checkAuth = async () => {
     try {
@@ -44,20 +57,12 @@ export const AuthProvider = ({ children }) => {
       setUser(userData)
       setIsAuthenticated(true)
       setIsAdmin(userData.role === 'admin')
-      
-      await loadUserTokens()
     } catch (error) {
       console.error('Auth check failed:', error)
+      if (error.response?.status === 401) {
+        clearAuthData()
+      }
       throw error
-    }
-  }
-
-  const loadUserTokens = async () => {
-    try {
-      const response = await authAPI.getMyTokens()
-      setTokens(response.data.tokens)
-    } catch (error) {
-      console.error('Failed to load user tokens:', error)
     }
   }
 
@@ -73,39 +78,18 @@ export const AuthProvider = ({ children }) => {
       setUser(userData)
       setIsAuthenticated(true)
       setIsAdmin(userData.role === 'admin')
-      await loadUserTokens()
       
       toast.success('Login successful!')
       return { success: true, data: response.data }
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Login failed'
-      toast.error(errorMessage)
-      return { 
-        success: false, 
-        error: errorMessage 
+      
+      if (error.response?.status === 429) {
+        toast.error('Too many login attempts. Please wait a moment.')
+      } else {
+        toast.error(errorMessage)
       }
-    }
-  }
-
-  const register = async (userData) => {
-    try {
-      const response = await authAPI.register(userData)
-      const { user: newUser, tokens: newTokens } = response.data
       
-      localStorage.setItem('accessToken', newTokens.accessToken)
-      localStorage.setItem('refreshToken', newTokens.refreshToken)
-      localStorage.setItem('user', JSON.stringify(newUser))
-      
-      setUser(newUser)
-      setIsAuthenticated(true)
-      setIsAdmin(newUser.role === 'admin')
-      await loadUserTokens()
-      
-      toast.success('Registration successful!')
-      return { success: true, data: response.data }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Registration failed'
-      toast.error(errorMessage)
       return { 
         success: false, 
         error: errorMessage 
@@ -127,55 +111,6 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logoutAll = async () => {
-    try {
-      await authAPI.logoutAll()
-      toast.success('Logged out from all devices')
-    } catch (error) {
-      console.error('Logout all error:', error)
-    } finally {
-      clearAuthData()
-    }
-  }
-
-  const clearAuthData = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('user')
-    setUser(null)
-    setIsAuthenticated(false)
-    setIsAdmin(false)
-    setTokens([])
-  }
-
-  const refreshTokens = async () => {
-    try {
-      const refreshToken = localStorage.getItem('refreshToken')
-      if (!refreshToken) {
-        throw new Error('No refresh token available')
-      }
-
-      const response = await authAPI.refreshToken(refreshToken)
-      const { tokens: newTokens } = response.data
-
-      localStorage.setItem('accessToken', newTokens.accessToken)
-      if (newTokens.refreshToken) {
-        localStorage.setItem('refreshToken', newTokens.refreshToken)
-      }
-
-      return newTokens
-    } catch (error) {
-      logout()
-      throw error
-    }
-  }
-
-  const updateUserProfile = (userData) => {
-    setUser(userData)
-    localStorage.setItem('user', JSON.stringify(userData))
-    setIsAdmin(userData.role === 'admin')
-  }
-
   const value = {
     user,
     isAuthenticated,
@@ -183,13 +118,9 @@ export const AuthProvider = ({ children }) => {
     loading,
     tokens,
     login,
-    register,
     logout,
-    logoutAll,
-    refreshTokens,
-    checkAuth,
-    updateUserProfile,
-    loadUserTokens
+    clearAuthData,
+    checkAuth
   }
 
   return (

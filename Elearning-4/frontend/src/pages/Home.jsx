@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { blogAPI, categoryAPI, tagAPI } from '../api'
 import { BlogList, BlogFilters } from '../components/blog'
 import { Button, Pagination } from '../components/ui'
-import { BookOpen, TrendingUp, Clock, Users, Eye, Share2 } from 'lucide-react'
+import { BookOpen, TrendingUp, Users } from 'lucide-react'
+import { useDebounce } from '../hooks/useDebounce'
 
 const Home = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,7 @@ const Home = () => {
   const [tags, setTags] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [initialLoad, setInitialLoad] = useState(true)
 
   const [filters, setFilters] = useState({
     search: '',
@@ -23,56 +25,107 @@ const Home = () => {
   })
 
   const [pagination, setPagination] = useState({})
+  
+  // Sử dụng debounce cho search
+  const debouncedSearch = useDebounce(filters.search, 800)
 
-  useEffect(() => {
-    loadBlogs()
-    loadCategories()
-    loadTags()
-  }, [filters])
+  // Load blogs - chỉ chạy khi filters thay đổi
+  const loadBlogs = useCallback(async () => {
+    // Không load nếu đang trong initial load và có lỗi rate limiting
+    if (initialLoad && error?.includes('Too many requests')) {
+      return
+    }
 
-  const loadBlogs = async () => {
     try {
       setLoading(true)
       setError('')
-      const response = await blogAPI.getAll(filters)
-      setBlogs(response.data)
-      setPagination(response.pagination)
+      
+      const response = await blogAPI.getAll({
+        ...filters,
+        search: debouncedSearch
+      })
+      
+      setBlogs(response.data || [])
+      setPagination(response.pagination || {
+        currentPage: 1,
+        totalPages: 1,
+        totalItems: 0,
+        itemsPerPage: filters.limit
+      })
     } catch (error) {
-      setError('Failed to load blogs')
       console.error('Error loading blogs:', error)
+      
+      if (error.response?.status === 429 || error.message?.includes('Too many requests')) {
+        setError('Please wait a moment before trying again')
+        // Nếu là initial load, set empty data
+        if (initialLoad) {
+          setBlogs([])
+          setPagination({
+            currentPage: 1,
+            totalPages: 1,
+            totalItems: 0,
+            itemsPerPage: filters.limit
+          })
+        }
+      } else {
+        setError('Failed to load blogs')
+      }
     } finally {
       setLoading(false)
+      setInitialLoad(false)
     }
-  }
+  }, [debouncedSearch, filters.category, filters.tag, filters.sortBy, filters.page, filters.limit, initialLoad, error])
 
-  const loadCategories = async () => {
+  // Load categories và tags - chỉ một lần
+  const loadCategories = useCallback(async () => {
     try {
       const response = await categoryAPI.getAll({ limit: 100 })
-      setCategories(response.data)
+      setCategories(response.data || [])
     } catch (error) {
       console.error('Error loading categories:', error)
+      setCategories([])
     }
-  }
+  }, [])
 
-  const loadTags = async () => {
+  const loadTags = useCallback(async () => {
     try {
       const response = await tagAPI.getAll({ limit: 100 })
-      setTags(response.data)
+      setTags(response.data || [])
     } catch (error) {
       console.error('Error loading tags:', error)
+      setTags([])
     }
-  }
+  }, [])
 
-  const handleFiltersChange = (newFilters) => {
+  // Effect cho blogs - chỉ chạy khi loadBlogs thay đổi
+  useEffect(() => {
+    loadBlogs()
+  }, [loadBlogs])
+
+  // Effect cho categories và tags - chỉ chạy một lần
+  useEffect(() => {
+    loadCategories()
+    loadTags()
+  }, [loadCategories, loadTags])
+
+  const handleFiltersChange = useCallback((newFilters) => {
     setFilters(prev => ({
       ...prev,
       ...newFilters,
       page: 1
     }))
-  }
+  }, [])
 
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setFilters(prev => ({ ...prev, page }))
+  }, [])
+
+  const handleRetry = () => {
+    setInitialLoad(true)
+    setError('')
+    loadBlogs()
+    loadCategories()
+    loadTags()
   }
 
   return (
@@ -115,6 +168,16 @@ const Home = () => {
               Discover the latest and most popular stories from our community of writers.
             </p>
           </div>
+
+          {/* Error Message với Retry Button */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-center">
+              <p className="text-red-700 mb-2">{error}</p>
+              <Button onClick={handleRetry} variant="outline" size="small">
+                Try Again
+              </Button>
+            </div>
+          )}
 
           {/* Filters */}
           <BlogFilters
@@ -225,4 +288,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default React.memo(Home)

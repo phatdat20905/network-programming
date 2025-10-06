@@ -12,7 +12,7 @@ router.use('/auth', authRoutes);
 router.use('/blogs', blogRoutes);
 router.use('/upload', uploadRoutes);
 router.use('/categories', categoryRoutes);
-router.use('/api/tags', tagRoutes); 
-router.use('/api/admin/users', userRoutes); 
+router.use('/tags', tagRoutes); 
+router.use('/admin/users', userRoutes); 
 
 export default router;
