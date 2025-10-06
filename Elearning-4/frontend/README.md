@@ -14,3 +14,88 @@ The React Compiler is currently not compatible with SWC. See [this issue](https:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+frontend/
+├── public/
+│   ├── index.html
+│   └── vite.svg
+├── src/
+│   ├── api/
+│   │   ├── axiosInstance.js
+│   │   ├── auth.js
+│   │   ├── blog.js
+│   │   ├── category.js
+│   │   ├── tag.js
+│   │   ├── user.js
+│   │   └── upload.js
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Textarea.jsx
+│   │   │   ├── Select.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── Pagination.jsx
+│   │   │   ├── Alert.jsx
+│   │   │   └── ImageUpload.jsx
+│   │   ├── layout/
+│   │   │   ├── Header.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── Layout.jsx
+│   │   ├── auth/
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   └── AdminRoute.jsx
+│   │   ├── blog/
+│   │   │   ├── BlogCard.jsx
+│   │   │   ├── BlogList.jsx
+│   │   │   ├── BlogForm.jsx
+│   │   │   ├── BlogFilters.jsx
+│   │   │   └── BlogDetail.jsx
+│   │   └── admin/
+│   │       ├── UserManagement.jsx
+│   │       ├── CategoryManagement.jsx
+│   │       ├── TagManagement.jsx
+│   │       └── Dashboard.jsx
+│   ├── contexts/
+│   │   ├── AuthContext.jsx
+│   │   └── ThemeContext.jsx
+│   ├── hooks/
+│   │   ├── useAuth.js
+│   │   ├── useApi.js
+│   │   ├── useForm.js
+│   │   └── useDebounce.js
+│   ├── pages/
+│   │   ├── auth/
+│   │   │   ├── Login.jsx
+│   │   │   └── Register.jsx
+│   │   ├── blog/
+│   │   │   ├── BlogListPage.jsx
+│   │   │   ├── BlogDetailPage.jsx
+│   │   │   ├── BlogCreatePage.jsx
+│   │   │   └── BlogEditPage.jsx
+│   │   ├── admin/
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   ├── UserManagementPage.jsx
+│   │   │   ├── CategoryManagementPage.jsx
+│   │   │   └── TagManagementPage.jsx
+│   │   ├── Home.jsx
+│   │   ├── Profile.jsx
+│   │   └── NotFound.jsx
+│   ├── utils/
+│   │   ├── constants.js
+│   │   ├── helpers.js
+│   │   ├── validation.js
+│   │   └── formatters.js
+│   ├── styles/
+│   │   └── globals.css
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── router.jsx
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+└── postcss.config.js
