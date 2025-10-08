@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  grpc-server:
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ./grpc-server
+    ports:
+      - "50051:50051"
+    networks:
+      - chat-network
+
+  websocket-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile  
+    command: ./websocket-server
+    ports:
+      - "8080:8080"
+    networks:
+      - chat-network
+    depends_on:
+      - grpc-server
+
+  signalr-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ./signalr-server
+    ports:
+      - "8081:8081"
+    networks:
+      - chat-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ../web:/usr/share/nginx/html
+    networks:
+      - chat-network
+    depends_on:
+      - websocket-server
+      - grpc-server
+      - signalr-server
+
+networks:
+  chat-network:
+    driver: bridge

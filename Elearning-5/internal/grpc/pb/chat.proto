@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package chat;
+
+option go_package = "./pb";
+
+service ChatService {
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+  rpc StreamMessages (StreamRequest) returns (stream MessageResponse);
+  rpc GetStats (StatsRequest) returns (StatsResponse);
+}
+
+message MessageRequest {
+  string user = 1;
+  string message = 2;
+  string room = 3;
+}
+
+message MessageResponse {
+  string id = 1;
+  string user = 2;
+  string message = 3;
+  string timestamp = 4;
+  string room = 5;
+}
+
+message StreamRequest {
+  string user = 1;
+  string room = 2;
+}
+
+message StatsRequest {}
+
+message StatsResponse {
+  int32 active_connections = 1;
+  int64 total_messages = 2;
+  int64 uptime = 3;
+}

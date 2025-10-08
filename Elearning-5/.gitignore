@@ -1,0 +1,98 @@
+# Binaries và build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+/bin/
+/dist/
+/build/
+
+# Application binaries (từ go build)
+/grpc-server
+/websocket-server
+/signalr-server
+/cmd/*/main.exe
+
+# Go specific
+/go.sum
+/go.work
+/go.work.sum
+/vendor/
+
+# Generated protobuf files (nếu muốn generate mỗi lần build)
+/internal/grpc/pb/*.pb.go
+/internal/grpc/pb/*_grpc.pb.go
+
+# IDE và editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker build artifacts
+.dockerignore
+
+# Environment variables và configs
+.env
+.env.local
+.env.production
+*.env
+config.local.yaml
+config.dev.yaml
+
+# Log files
+*.log
+logs/
+*.txt.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Cache directories
+.cache/
+__pycache__/
+
+# Node.js (nếu có frontend build)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (từ python http.server)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Test coverage
+coverage.txt
+coverage.html
+*.cover
+*.coverprofile
+
+# Profiling data
+*.prof
+*.trace
+
+# Backup files
+*.bak
+*.backup

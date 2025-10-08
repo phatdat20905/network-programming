@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Performance Chat - gRPC, WebSocket, SignalR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 High Performance Chat Demo</h1>
+            <p>Real-time communication with gRPC, WebSocket, and SignalR-like services</p>
+        </header>
+
+        <div class="controls">
+            <div class="connection-controls">
+                <button id="connectWs" onclick="connectWebSocket()">Connect WebSocket</button>
+                <button id="connectSignalR" onclick="connectSignalR()">Connect SignalR</button>
+                <button id="connectGrpc" onclick="connectGRPC()">Connect gRPC</button>
+                <button id="disconnectAll" onclick="disconnectAll()">Disconnect All</button>
+            </div>
+            
+            <div class="user-controls">
+                <input type="text" id="username" placeholder="Your username" value="User1">
+                <input type="text" id="room" placeholder="Room name" value="general">
+                <button onclick="updateUserInfo()">Update</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span>WebSocket:</span>
+                <span id="wsStatus" class="status disconnected">Disconnected</span>
+            </div>
+            <div class="stat-item">
+                <span>SignalR:</span>
+                <span id="signalrStatus" class="status disconnected">Disconnected</span>
+            </div>
+            <div class="stat-item">
+                <span>gRPC:</span>
+                <span id="grpcStatus" class="status disconnected">Disconnected</span>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div id="chat" class="chat-messages"></div>
+            
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+                <select id="protocolSelect">
+                    <option value="websocket">WebSocket</option>
+                    <option value="signalr">SignalR</option>
+                    <option value="grpc">gRPC</option>
+                </select>
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <div class="services-info">
+            <h3>Services Status</h3>
+            <div id="servicesInfo" class="services-grid">
+                <div class="service-card">
+                    <h4>WebSocket</h4>
+                    <p>Port: 8080</p>
+                    <p>Full-duplex real-time communication</p>
+                </div>
+                <div class="service-card">
+                    <h4>gRPC</h4>
+                    <p>Port: 50051</p>
+                    <p>High-performance RPC with HTTP/2</p>
+                </div>
+                <div class="service-card">
+                    <h4>SignalR-like</h4>
+                    <p>Port: 8081</p>
+                    <p>ASP.NET SignalR compatible protocol</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
